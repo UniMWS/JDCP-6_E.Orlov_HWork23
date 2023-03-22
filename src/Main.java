@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static File textFile = new File("basket.txt");
+    public static File binFile = new File("basket.bin");
     public static String[] products = {"Молоко", "Хлеб", "Гречневая крупа"};
     public static int[] prices = {50, 14, 80};
 
@@ -11,7 +12,13 @@ public class Main {
         System.out.println("JDCP-6 + Евгений Орлов + ДЗ-23 + " +
                 "Потоки ввода-вывода. Работа с файлами. Сериализация\n");
         Scanner scanner = new Scanner(System.in);
+
+        // я не понимаю сериализацию самого себя: 88-я минута вебинара меня вообще добила
+//        Basket.loadFromBinFile(binFile);
         Basket basket = new Basket(products, prices);
+        basket = Basket.loadFromBinFile(binFile);
+
+
         groceryList(basket);// проверка файла и список продуктов
         while (true) {
             System.out.println("\nВыберите товар и количество через пробел " +
@@ -34,7 +41,8 @@ public class Main {
                     int productNumber = Integer.parseInt(parts[0]) - 1;//номер продукта
                     int productCount = Integer.parseInt(parts[1]);//штук продукта
                     basket.addToCart(productNumber, productCount);// ушло в корзину
-                    basket.saveTxt(textFile);// корзина ушла в файл
+//                    basket.saveTxt(textFile);// корзина ушла в файл
+                    basket.saveBin(binFile);// весь объект basket ушёл в файл
                 } else
                     System.out.println(String.format("Количество товара не может быть отрицательным" +
                             " '%s'", Integer.parseInt(parts[1])));
@@ -48,8 +56,9 @@ public class Main {
     }
 
     private static void groceryList(Basket basket) {
-        basket.loadFromTxtFile(textFile);//попытка загрузки корзины из файла
-        if (textFile.exists()) basket.printCart();// проверка существования файла
+
+//        basket.loadFromTxtFile(textFile);//попытка загрузки корзины из файла
+//        if (textFile.exists()) basket.printCart();// проверка существования файла
         System.out.println("Список доступных для покупки продуктов:");
         for (int i = 0; i < products.length; i++) {
             System.out.printf("%d. %s %d руб/шт \n", i + 1, products[i], prices[i]);

@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.Arrays;
 
-public class Basket {
+public class Basket implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String[] products;
     private int[] prices;
     private static int[] amounts;
@@ -64,6 +65,35 @@ public class Basket {
             System.out.print("Корзина пуста. ");
         return null;
     }
+
+    public void saveBin(File file) {
+        try (FileOutputStream fos = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+// запишем экземпляр класса в файл
+            oos.writeObject(this);
+            oos.flush();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    //я не понимаю как это вообще возможно без теневых копий самого себя зашить,
+    // а потом безболезненно обратно "вышить крестиком"?
+    public static Basket loadFromBinFile(File file) {
+        Basket basket = null;
+// откроем входной поток для чтения файла
+        try (FileInputStream fis = new FileInputStream(file);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+// десериализуем объект и скастим его в класс
+            basket = (Basket) ois.readObject();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        System.out.println("для контроля \"loadFromBinFile\" " + basket + "\n");// контроль amounts
+        return basket;
+    }
+    // мне нужна помощь: как это понять и где что читать? куда копать?
+    // отсылать к "материалам" урока бессмысленно - вот он здесь результат.
 
     @Override
     public String toString() {
