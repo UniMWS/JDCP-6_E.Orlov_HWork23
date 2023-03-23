@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.util.Scanner;
 
 public class Main {
-    public static File textFileMain = new File("basket.txt");
     public static File binFileMain = new File("basket.bin");
     public static String[] products = {"Молоко", "Хлеб", "Гречневая крупа"};
     public static int[] prices = {50, 14, 80};
@@ -15,15 +14,6 @@ public class Main {
                 "Потоки ввода-вывода. Работа с файлами. Сериализация");
         Scanner scanner = new Scanner(System.in);
 
-        // начало блока для textFileMain
-//        Basket basket = new Basket(products, prices);
-//        if (textFileMain.exists()) {// проверка существования файла
-//            basket.loadFromTxtFile(textFileMain);//попытка загрузки корзины из файла
-//            basket.printCart();
-//        } else System.out.print("Корзина пуста. ");
-        // конец блока для textFileMain
-
-        // начало блока для binFileMain
         System.out.println("Задача 2\n");
         Basket basket;
         if (binFileMain.exists()) {// проверка существования файла
@@ -34,8 +24,6 @@ public class Main {
             System.out.print("Корзина пуста. ");
             basket = new Basket(products, prices);
         }
-        // конец блока для binFileMain
-
 
         groceryList(basket);// список продуктов
         while (true) {
@@ -59,7 +47,6 @@ public class Main {
                     int productNumber = Integer.parseInt(parts[0]) - 1;//номер продукта
                     int productCount = Integer.parseInt(parts[1]);//штук продукта
                     basket.addToCart(productNumber, productCount);// ушло в корзину
-//                    basket.saveTxt(textFileMain);// корзина ушла в файл
                     basket.saveBin(binFileMain);// весь объект basket ушёл в файл
                 } else
                     System.out.println(String.format("Количество товара не может быть отрицательным" +
