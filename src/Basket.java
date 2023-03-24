@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.Arrays;
 
-import static java.util.Arrays.*;
-
 public class Basket implements Serializable {
     private static final long serialVersionUID = 1L;
     private String[] productsBasket;
@@ -11,22 +9,26 @@ public class Basket implements Serializable {
     private int summaryBasket;
 
     public Basket(String[] productsBasket, int[] pricesBasket) {
-//конструктор, принимающий массив цен и названий продуктов;
         this.productsBasket = productsBasket;
         this.pricesBasket = pricesBasket;
         this.amountsBasket = new int[productsBasket.length];
         this.summaryBasket = 0;
     }
 
+    public Basket(String[] productsBasket, int[] pricesBasket, int[] amountsBasket, int summaryBasket) {
+        this.productsBasket = productsBasket;
+        this.pricesBasket = pricesBasket;
+        this.amountsBasket = amountsBasket;
+        this.summaryBasket = summaryBasket;
+    }
+
     public void addToCart(int productNum, int amount) {
-//метод добавления amount штук продукта номер productNum в корзину
-        int currentPrice = pricesBasket[productNum];  //цена этого продукта
+        int currentPrice = pricesBasket[productNum];  //цена выбранного продукта
         amountsBasket[productNum] += amount;
         summaryBasket += currentPrice * amount;
     }
 
     public void printCart() {
-//метод вывода на экран покупательской корзины.
         for (int i = 0; i < amountsBasket.length; i++) {
             if (!(amountsBasket[i] == 0)) {
                 System.out.printf("%s %d шт. по %d руб./шт. - %d руб в сумме; \n",
@@ -38,7 +40,6 @@ public class Basket implements Serializable {
     }
 
     public void saveTxt(File textFile) {
-//метод сохранения корзины в текстовый файл; использовать встроенные сериализаторы нельзя; //А как это?
         try (PrintWriter out = new PrintWriter(textFile)) {
             for (String product : productsBasket)
                 out.print(product + " ");
@@ -60,35 +61,23 @@ public class Basket implements Serializable {
         int[] pricesLoad;
         int[] amountsLoad;
         int summaryLoad;
-
         try (BufferedReader br = new BufferedReader(new FileReader(textFile))) {
-
             productsLoad = (br.readLine()).split(" ");     // первая строка файла
-            System.out.println(Arrays.toString(productsLoad));   //контрольная печать
-
             String[] interim2 = (br.readLine()).split(" ");// вторая строка файла
             pricesLoad = new int[productsLoad.length];
             for (int i = 0; i < interim2.length; i++) {
                 pricesLoad[i] = Integer.parseInt(interim2[i]);
             }
-            System.out.println(Arrays.toString(pricesLoad));     //контрольная печать
-
             String[] interim3 = (br.readLine()).split(" ");// третья строка файла
             amountsLoad = new int[interim3.length];
             for (int i = 0; i < interim3.length; i++) {
                 amountsLoad[i] = Integer.parseInt(interim3[i]);
             }
-            System.out.println(Arrays.toString(amountsLoad));    //контрольная печать
-
             summaryLoad = Integer.parseInt(br.readLine());       // четвертая строка файла
-            System.out.println(summaryLoad);
-
+            return new Basket(productsLoad, pricesLoad, amountsLoad, summaryLoad);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        if (textFile.exists())                                   // если файл существует
-            System.out.println("Корзина уже существует и будет использована:");
-        // что писать в return?
         return null;
     }
 

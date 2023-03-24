@@ -1,7 +1,5 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Scanner;
 
 public class Main {
@@ -13,16 +11,16 @@ public class Main {
         System.out.println("JDCP-6 + Евгений Орлов + ДЗ-23 + " +
                 "Потоки ввода-вывода. Работа с файлами. Сериализация");
         Scanner scanner = new Scanner(System.in);
-
-        // начало блока для textFileMain
         System.out.println("Задача 1\n");
-        Basket basket = new Basket(products, prices);
+        Basket basket;
         if (textFileMain.exists()) {// проверка существования файла
-            basket.loadFromTxtFile(textFileMain);//загрузка корзины из файла
+            System.out.println("Корзина уже существует и будет использована:");
+            basket = Basket.loadFromTxtFile(textFileMain);//загрузка корзины из файла
             basket.printCart();
-        } else System.out.print("Корзина пуста. ");
-        // конец блока для textFileMain
-
+        } else {
+            System.out.print("Корзина пуста. ");
+            basket = new Basket(products, prices);
+        }
         groceryList(basket);// список продуктов
         while (true) {
             System.out.println("\nВыберите товар и количество через пробел " +
