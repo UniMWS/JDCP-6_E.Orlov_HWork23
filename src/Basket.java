@@ -1,12 +1,14 @@
 import java.io.*;
 import java.util.Arrays;
 
+import static java.util.Arrays.*;
+
 public class Basket implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static String[] productsBasket;
-    private static int[] pricesBasket;
-    private static int[] amountsBasket;
-    private static int summaryBasket;
+    private String[] productsBasket;
+    private int[] pricesBasket;
+    private int[] amountsBasket;
+    private int summaryBasket;
 
     public Basket(String[] productsBasket, int[] pricesBasket) {
 //конструктор, принимающий массив цен и названий продуктов;
@@ -54,27 +56,39 @@ public class Basket implements Serializable {
     }
 
     public static Basket loadFromTxtFile(File textFile) {
-//статический(!) метод восстановления объекта корзины из текстового файла, в который ранее была она сохранена;
+        String[] productsLoad;
+        int[] pricesLoad;
+        int[] amountsLoad;
+        int summaryLoad;
+
         try (BufferedReader br = new BufferedReader(new FileReader(textFile))) {
-//чтение построчно
-            String[] interim1 = (br.readLine()).split(" ");     // первая строка файла
-            for (int i = 0; i < productsBasket.length; i++) {
-                productsBasket[i] = interim1[i];
+
+            productsLoad = (br.readLine()).split(" ");     // первая строка файла
+            System.out.println(Arrays.toString(productsLoad));   //контрольная печать
+
+            String[] interim2 = (br.readLine()).split(" ");// вторая строка файла
+            pricesLoad = new int[productsLoad.length];
+            for (int i = 0; i < interim2.length; i++) {
+                pricesLoad[i] = Integer.parseInt(interim2[i]);
             }
-            String[] interim2 = (br.readLine()).split(" ");     // вторая строка файла
-            for (int i = 0; i < pricesBasket.length; i++) {
-                pricesBasket[i] = Integer.parseInt(interim2[i]);
+            System.out.println(Arrays.toString(pricesLoad));     //контрольная печать
+
+            String[] interim3 = (br.readLine()).split(" ");// третья строка файла
+            amountsLoad = new int[interim3.length];
+            for (int i = 0; i < interim3.length; i++) {
+                amountsLoad[i] = Integer.parseInt(interim3[i]);
             }
-            String[] interim3 = (br.readLine()).split(" ");     // третья строка файла
-            for (int i = 0; i < amountsBasket.length; i++) {
-                amountsBasket[i] = Integer.parseInt(interim3[i]);
-            }
-            summaryBasket = Integer.parseInt(br.readLine());        // четвертая строка файла
+            System.out.println(Arrays.toString(amountsLoad));    //контрольная печать
+
+            summaryLoad = Integer.parseInt(br.readLine());       // четвертая строка файла
+            System.out.println(summaryLoad);
+
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        if (textFile.exists())                                      // если файл существует
+        if (textFile.exists())                                   // если файл существует
             System.out.println("Корзина уже существует и будет использована:");
+        // что писать в return?
         return null;
     }
 
